@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Pokemon from "./components/Pokemon";
 import PokeLogo from "../src/assets/images/poke_logo.png";
 import InfoDialog from "./components/InfoDialog";
+import axios from "axios";
 
 import React from "react";
 
@@ -24,11 +25,15 @@ function App() {
 
   const getAllPokemons = async () => {
     debugger;
-    const response = await fetch(loadMore);
-    const data = await response.json();
-    setLoadMore(data.next);
-    getPokemonData(data.results);
-    console.log(data);
+
+    var data;
+    const response = axios.get(loadMore).then((response) => {
+      data = response.data;
+      setLoadMore(response.data.next);
+
+      getPokemonData(response.data.results);
+      console.log(response.data.results);
+    });
   };
 
   const getPokemonData = async (result) => {
@@ -41,9 +46,14 @@ function App() {
       const data = await response.json();
 
       setAllPokemons((pokemonList) => [...pokemonList, data]);
-      allPokemons.push(data);
+      allPokemons.sort(function (a, b) {
+        return a.id - b.id;
+      });
+
+      // allPokemons.push(data)
     });
 
+    console.log("allPokemons");
     console.log(allPokemons);
   };
 
@@ -110,18 +120,18 @@ function App() {
       <img src={PokeLogo} alt="pokelogo" className="poke__logo" />
       <div className="pokemon__container">
         <div className="all__pokemons">
-          {allPokemons.map((pokemon, index) => (
+          {Object.keys(allPokemons).map((item, index) => (
             <Pokemon
-              id={pokemon.id}
-              image={pokemon.sprites.other.dream_world.front_default}
-              name={pokemon.name}
-              type={pokemon.types}
               key={index}
+              id={allPokemons[item].id}
+              image={allPokemons[item].sprites.other.dream_world.front_default}
+              name={allPokemons[item].name}
+              type={allPokemons[item].types}
               onElemClick={() =>
                 fetchPokemonData(
-                  pokemon.name,
-                  pokemon.types,
-                  pokemon.sprites.other.dream_world.front_default
+                  allPokemons[item].name,
+                  allPokemons[item].types,
+                  allPokemons[item].sprites.other.dream_world.front_default
                 )
               }
             />
