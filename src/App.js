@@ -21,6 +21,7 @@ function App() {
   const [category, setCategory] = useState();
   const [stats, setStats] = useState([]);
   const [imageURL, setimageURL] = useState("");
+  const [pokeName, setPokeName] = useState("");
   const [showInfo, setshowInfo] = useState(false);
 
   const getAllPokemons = async () => {
@@ -89,6 +90,7 @@ function App() {
     setCategory(category);
     setAbilities(abilities);
     setimageURL(imageURL);
+    setPokeName(pokemon);
 
     console.log(data);
     console.log(abilities);
@@ -114,6 +116,7 @@ function App() {
           category={category}
           stats={stats}
           img={imageURL}
+          name={pokeName}
           cancel={() => closeDialog()}
         ></InfoDialog>
       )}
