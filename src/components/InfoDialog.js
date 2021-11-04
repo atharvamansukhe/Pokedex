@@ -206,6 +206,7 @@ export default function InfoDialog(props) {
           <Dialog
             aria-labelledby="customized-dialog-title"
             open={props.open}
+            onBackdropClick={props.cancel}
             fullWidth
             maxWidth="md"
             className="dialog__bg"
@@ -233,11 +234,11 @@ export default function InfoDialog(props) {
                     ))}
                   </div>
                   <div>
-                    <p>
+                    <p className="dimensions">
                       <span className="info__container__headings">Height</span>{" "}
                       {`${props.height / 10} m`}{" "}
                     </p>
-                    <p>
+                    <p className="dimensions">
                       <span className="info__container__headings">Weight</span>
                       {` ${props.weight / 10} kg`}
                     </p>
@@ -245,14 +246,7 @@ export default function InfoDialog(props) {
                 </div>
 
                 <div className="info__container__data">
-                  <div>
-                    <img
-                      src="https://d30y9cdsu7xlg0.cloudfront.net/png/53504-200.png"
-                      className="close__btn"
-                      onClick={props.cancel}
-                      style={closeImg}
-                    />
-                  </div>
+                  {/* <div><img src='https://d30y9cdsu7xlg0.cloudfront.net/png/53504-200.png' className="close__btn" onClick={props.cancel} style={closeImg} /></div> */}
                   <div className="right__box">
                     <div className="info__container__data__header">
                       <div className="info__container__data__abilities">
@@ -277,7 +271,9 @@ export default function InfoDialog(props) {
                             <div className="info__container__stat__columns__name">
                               {stat["stat__name"]}
                             </div>
-                            <div>{stat["stat__val"]}</div>
+                            <div className="info__container__stat__columns__val">
+                              {stat["stat__val"]}
+                            </div>
                           </div>
                         ))}
                       </div>
