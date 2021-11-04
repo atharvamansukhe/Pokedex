@@ -185,7 +185,6 @@ export default function InfoDialog(props) {
       // code block
     }
   } else if (props.category.length == 1) {
-    console.log("else if babyyyy");
     color2 = color1;
   }
 
@@ -218,6 +217,9 @@ export default function InfoDialog(props) {
             >
               <div className="info__container">
                 <div className="info__container__img">
+                  <div className="pokemon__id">
+                    #{String(props.number).padStart(3, "0")}
+                  </div>
                   <div className="pokemon__name">{props.name}</div>
                   <div>
                     <img src={props.img} />
@@ -248,6 +250,7 @@ export default function InfoDialog(props) {
                 <div className="info__container__data">
                   {/* <div><img src='https://d30y9cdsu7xlg0.cloudfront.net/png/53504-200.png' className="close__btn" onClick={props.cancel} style={closeImg} /></div> */}
                   <div className="right__box">
+                    <div>{props.description}</div>
                     <div className="info__container__data__header">
                       <div className="info__container__data__abilities">
                         <div className="info__container__headings">

@@ -17,7 +17,7 @@ const Pokemon = ({ id, image, name, type, onElemClick }) => {
       color1 = "#dcdcdc";
       break;
     case "fire":
-      color1 = "rgba(253, 125, 36, 0.4)";
+      color1 = "rgb(228 160 114)";
       break;
     case "water":
       color1 = "rgba(69, 146, 196, 0.5)";
@@ -77,7 +77,7 @@ const Pokemon = ({ id, image, name, type, onElemClick }) => {
         color2 = "#dcdcdc";
         break;
       case "fire":
-        color2 = "rgba(253, 125, 36, 0.4)";
+        color2 = "rgb(228 160 114)";
         break;
       case "water":
         color2 = "rgba(69, 146, 196, 0.5)";
@@ -125,7 +125,7 @@ const Pokemon = ({ id, image, name, type, onElemClick }) => {
       // code block
     }
   } else if (type.length == 1) {
-    console.log("else if babyyyy");
+    // console.log("else if babyyyy");
     color2 = color1;
   }
 
