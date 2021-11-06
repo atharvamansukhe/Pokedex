@@ -4,8 +4,7 @@ import Pokedex from "../src/assets/images/pokedex.png";
 import InfoDialog from "./components/InfoDialog";
 import axios from "axios";
 import GitHubIcon from "@material-ui/icons/GitHub";
-
-const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+import Scroll from "./components/Scroll";
 
 class App extends React.Component {
   constructor(props) {
@@ -107,12 +106,9 @@ class App extends React.Component {
         isChecked: true,
       });
     }
-    console.log("component mounted");
   }
 
   getAllPokemons = async (offset, limit) => {
-    // debugger
-
     const response = await axios
       .get(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`)
       .catch((err) => console.log("Error:", err));
@@ -139,32 +135,30 @@ class App extends React.Component {
       showLoading: false,
     });
 
-    console.log("allPokes");
-    console.log(this.state.allPokemons);
+    // console.log("allPokes");
+    // console.log(this.state.allPokemons);
   };
 
   fetchPokemonData = async (number, pokemon, category, imageURL) => {
     debugger;
 
-    this.setState({
-      abilities: [],
-      stats: [],
-    });
-
     const response = await axios
       .get(`https://pokeapi.co/api/v2/pokemon/${pokemon}`)
       .catch((err) => console.log("Error:", err));
-    console.log(response);
+    // console.log(response);
+
+    var statistics = [],
+      abs = [];
 
     for (var i = 0; i < response.data.abilities.length; i++) {
-      this.state.abilities.push(response.data.abilities[i].ability.name);
+      abs.push(response.data.abilities[i].ability.name);
     }
 
     for (var j = 0; j < response.data.stats.length; j++) {
       var Obj = {};
       Obj["stat__name"] = response.data.stats[j].stat.name;
       Obj["stat__val"] = response.data.stats[j].base_stat;
-      this.state.stats.push(Obj);
+      statistics.push(Obj);
     }
 
     this.setState({
@@ -172,21 +166,22 @@ class App extends React.Component {
       height: response.data.height,
       category: category,
       pokeNumber: number,
-      abilities: this.state.abilities,
       imageURL: imageURL,
       pokeName: pokemon,
       showInfo: true,
+      stats: statistics,
+      abilities: abs,
     });
 
-    console.log("stats");
-    console.log(this.state.stats);
+    // console.log("stats");
+    // console.log(statistics);
+    // console.log(this.state.stats);
 
     this.fetchPokemonDescription(pokemon);
   };
 
   fetchPokemonDescription = async (pokemon_name) => {
     debugger;
-    var desc;
 
     try {
       const response = await axios
@@ -200,7 +195,6 @@ class App extends React.Component {
           break;
         }
       }
-
       this.setState({
         description: this.state.description,
       });
@@ -210,8 +204,7 @@ class App extends React.Component {
       });
     }
 
-    console.log("description");
-    console.log(desc);
+    // console.log("description");
   };
 
   closeDialog = () => {
@@ -223,28 +216,14 @@ class App extends React.Component {
   handleChangeRegions = (event) => {
     debugger;
 
-    // this.state.allPokemons = [];
-    // var emptyArray = [];
-
-    // this.setState({
-    //     allPokemons : emptyArray,
-    // })
-
-    // this.state.isFilter = false;
-
     for (var i = 0; i < this.state.regions.length; i++) {
       if (this.state.regions[i].name === event.target.value) {
-        // this.state.limit = this.state.regions[i].limit;
-        // this.state.offset = this.state.regions[i].offset;
-        // this.state.allPokemons = [];
-        // this.state.showLoading = true;
-
         this.setState({
           valueregion: event.target.value,
           valuetype: "all types",
           isSearch: false,
           isFilter: false,
-          showLoading: false,
+          showLoading: true,
         });
 
         this.getAllPokemons(
@@ -256,34 +235,11 @@ class App extends React.Component {
       }
     }
 
-    // this.state.limit = region.limit;
-    // this.state.offset = region.offset;
-    // this.state.allPokemons = [];
-    // this.state.showLoading = true;
-
-    // this.setState({
-    //     allPokemons : [],
-    //     limit : region.limit,
-    //     offset: region.offset,
-    // })
-
-    // this.forceUpdate();
-
-    // this.setState({
-    //     allPokemons : [],
-    // }, () => {
-    //     // this.getAllPokemons();
-    // })
-
-    console.log("limit");
-    console.log(event.target.value);
-    // console.log("offset");
-    // console.log(this.state.offset)
-
-    // this.getAllPokemons();
+    // console.log("limit");
+    // console.log(event.target.value);
   };
 
-  handleChangeTypes = async (event) => {
+  handleChangeTypes = (event) => {
     debugger;
 
     if (event.target.value === "all types") {
@@ -294,37 +250,29 @@ class App extends React.Component {
       return;
     }
 
-    // this.state.swapPokemons = this.state.allPokemons;
-    this.state.isSearch = false;
-    this.state.valuesearch = "";
-    this.state.isFilter = true;
-    this.state.filterPokemons = [];
+    let filterArr = [];
 
     for (var i = 0; i < this.state.allPokemons.length; i++) {
       for (var j = 0; j < this.state.allPokemons[i].types.length; j++) {
         if (
           event.target.value === this.state.allPokemons[i].types[j].type.name
         ) {
-          // this.state.filterPokemons.push(this.state.allPokemons[i])
-          this.setState({
-            filterPokemons: this.state.filterPokemons.concat(
-              this.state.allPokemons[i]
-            ),
-          });
+          filterArr.push(this.state.allPokemons[i]);
         }
       }
     }
 
-    this.state.filterPokemons.length === 0
-      ? this.setState({ noDataFound: true })
-      : this.setState({ noDataFound: false });
-
     this.setState({
+      isSearch: false,
+      valuesearch: "",
+      isFilter: true,
+      filterPokemons: filterArr,
       valuetype: event.target.value,
     });
 
-    // this.state.allPokemons = this.state.filterPokemons;
-    this.forceUpdate();
+    this.state.filterPokemons.length === 0
+      ? this.setState({ noDataFound: true })
+      : this.setState({ noDataFound: false });
   };
 
   handleChangeSearch = (event) => {
@@ -342,7 +290,7 @@ class App extends React.Component {
           valuesearch: event.target.value,
         });
 
-    this.state.searchPokemons = [];
+    let searchArr = [];
 
     for (var i = 0; i < this.state.allPokemons.length; i++) {
       if (
@@ -350,16 +298,13 @@ class App extends React.Component {
           event.target.value.toLowerCase()
         )
       ) {
-        this.state.searchPokemons.push(this.state.allPokemons[i]);
+        searchArr.push(this.state.allPokemons[i]);
       }
     }
 
-    this.state.searchPokemons.length === 0
-      ? this.setState({ noDataFound: true })
-      : this.setState({ noDataFound: false });
-
-    console.log("search array");
-    console.log(this.state.searchPokemons);
+    searchArr.length === 0
+      ? this.setState({ noDataFound: true, searchPokemons: [] })
+      : this.setState({ noDataFound: false, searchPokemons: searchArr });
   };
 
   openGithub = () => {
@@ -369,10 +314,9 @@ class App extends React.Component {
   changeTheme = () => {
     debugger;
     var currentTheme = document.documentElement.getAttribute("data-theme");
-    console.log(currentTheme);
+    // console.log(currentTheme);
 
     var targetTheme = "light";
-    var modeSwitchText = "Light";
 
     if (currentTheme === "light") {
       targetTheme = "dark";
@@ -381,22 +325,23 @@ class App extends React.Component {
         isChecked: true,
       });
 
-      console.log(targetTheme);
+      // console.log(targetTheme);
     } else {
       this.setState({
         isChecked: false,
       });
     }
-
-    // var modeSwitch = document.getElementById("mode__label");
-    // modeSwitch.innerText = modeSwitchText;
-
     document.documentElement.setAttribute("data-theme", targetTheme);
+  };
+
+  handleClick = () => {
+    window[`scrollTo`]({ top: document.body.scrollHeight, behavior: `smooth` });
   };
 
   render() {
     return (
       <>
+        <Scroll showBelow={250} />
         {this.state.showLoading && (
           <div className="app__container">
             <div className="loading__text">Loading</div>
@@ -404,6 +349,7 @@ class App extends React.Component {
               <img
                 src="https://i.gifer.com/VgI.gif"
                 className="loading__gif noselect"
+                alt="loading-gif"
               ></img>
             </div>
           </div>
@@ -425,10 +371,6 @@ class App extends React.Component {
                 cancel={() => this.closeDialog()}
               ></InfoDialog>
             )}
-            {/* <Header
-                        className="container__header"
-                        regions={this.state.regions}
-                    /> */}
             <div className="app__header">
               <div className="switch">
                 <div className="toggle">

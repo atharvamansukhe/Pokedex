@@ -1,45 +1,9 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import MuiDialogContent from "@material-ui/core/DialogContent";
-import MuiDialogActions from "@material-ui/core/DialogActions";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
-import Typography from "@material-ui/core/Typography";
 import { StylesProvider } from "@material-ui/core/styles";
-import infoImg from "../assets/images/cardimg.svg";
 import "./InfoDialog.css";
-import Progress from "react-circle-progress-bar";
-
-const styles = (theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(2),
-  },
-  closeButton: {
-    display: "none",
-    position: "absolute",
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
-  },
-});
-
-// const DialogTitle = withStyles(styles)((props) => {
-//     const { children, open, classes, onClose, ...other } = props;
-//     return (
-//         <MuiDialogTitle disableTypography className={classes.root} {...other}>
-//             <Typography variant="h6">{children}</Typography>
-//             {onClose ? (
-//                 <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
-//                     <CloseIcon />
-//                 </IconButton>
-//             ) : null}
-//         </MuiDialogTitle>
-//     );
-// });
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -47,23 +11,7 @@ const DialogContent = withStyles((theme) => ({
   },
 }))(MuiDialogContent);
 
-const DialogActions = withStyles((theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(1),
-  },
-}))(MuiDialogActions);
-
 export default function InfoDialog(props) {
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   var color1, color2;
 
   switch (props.category[0].type.name) {
@@ -125,7 +73,7 @@ export default function InfoDialog(props) {
     // code block
   }
 
-  if (props.category.length == 2) {
+  if (props.category.length === 2) {
     switch (props.category[1].type.name) {
       case "grass":
         color2 = "rgba(155, 204, 80,0.65)";
@@ -184,16 +132,9 @@ export default function InfoDialog(props) {
       default:
       // code block
     }
-  } else if (props.category.length == 1) {
+  } else if (props.category.length === 1) {
     color2 = color1;
   }
-
-  let closeImg = {
-    cursor: "pointer",
-    float: "right",
-    marginTop: "5px",
-    width: "20px",
-  };
 
   return (
     <>
@@ -202,13 +143,14 @@ export default function InfoDialog(props) {
           {/* <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         Open dialog
       </Button> */}
+
           <Dialog
             aria-labelledby="customized-dialog-title"
             open={props.open}
             onBackdropClick={props.cancel}
             fullWidth
             maxWidth="md"
-            className="dialog__bg"
+            className="dialog__bg noselect"
           >
             {/* <img src='https://d30y9cdsu7xlg0.cloudfront.net/png/53504-200.png' onClick={props.cancel} style={closeImg} /> */}
             <DialogContent
@@ -222,7 +164,7 @@ export default function InfoDialog(props) {
                   </div>
                   <div className="pokemon__name">{props.name}</div>
                   <div>
-                    <img src={props.img} />
+                    <img src={props.img} alt="poke-img" />
                   </div>
                   <div className="info__container__data__type">
                     {/* <p className="info__container__headings">Type</p> */}
@@ -231,6 +173,7 @@ export default function InfoDialog(props) {
                         <img
                           src={`${category.type.name}.png`}
                           title={category.type.name}
+                          alt="poke-type"
                         ></img>
                       </div>
                     ))}
@@ -250,7 +193,8 @@ export default function InfoDialog(props) {
                 <div className="info__container__data">
                   {/* <div><img src='https://d30y9cdsu7xlg0.cloudfront.net/png/53504-200.png' className="close__btn" onClick={props.cancel} style={closeImg} /></div> */}
                   <div className="right__box">
-                    <div>{props.description}</div>
+                    <div className="info__container__headings">About</div>
+                    <div className="desc">{props.description}</div>
                     <div className="info__container__data__header">
                       <div className="info__container__data__abilities">
                         <div className="info__container__headings">
