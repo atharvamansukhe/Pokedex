@@ -5,6 +5,8 @@ import InfoDialog from "./components/InfoDialog";
 import axios from "axios";
 import GitHubIcon from "@material-ui/icons/GitHub";
 
+const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -30,6 +32,7 @@ class App extends React.Component {
       noDataFound: false,
       limit: 151,
       offset: 0,
+      isChecked: false,
       regions: [
         {
           name: "Kanto",
@@ -96,37 +99,47 @@ class App extends React.Component {
     };
   }
 
-  componentWillMount() {
-    this.getAllPokemons();
+  componentDidMount() {
+    this.getAllPokemons(this.state.offset, this.state.limit);
+    var currentTheme = document.documentElement.getAttribute("data-theme");
+    if (currentTheme === "dark") {
+      this.setState({
+        isChecked: true,
+      });
+    }
+    console.log("component mounted");
   }
 
-  getAllPokemons = async () => {
-    debugger;
+  getAllPokemons = async (offset, limit) => {
+    // debugger
 
     const response = await axios
-      .get(
-        `https://pokeapi.co/api/v2/pokemon?limit=${this.state.limit}&offset=${this.state.offset}`
-      )
+      .get(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`)
       .catch((err) => console.log("Error:", err));
-
     this.getPokemonData(response.data.results);
   };
 
   getPokemonData = async (result) => {
-    var response;
-    for (var i = 0; i < result.length; i++) {
-      response = await axios
-        .get(`https://pokeapi.co/api/v2/pokemon/${result[i].name}`)
-        .catch((err) => console.log("Error:", err));
-      this.state.allPokemons.push(response.data);
-    }
+    var pokemonArr = [];
 
-    this.state.showLoading = false;
+    await Promise.all(
+      result.map((pokemonItem) => {
+        return axios
+          .get(`https://pokeapi.co/api/v2/pokemon/${pokemonItem.name}`)
+          .then((result) => {
+            pokemonArr.push(result.data);
+          });
+      })
+    );
+
+    pokemonArr.sort((a, b) => (a.id > b.id ? 1 : b.id > a.id ? -1 : 0));
 
     this.setState({
-      allPokemons: this.state.allPokemons,
+      allPokemons: pokemonArr,
+      showLoading: false,
     });
 
+    console.log("allPokes");
     console.log(this.state.allPokemons);
   };
 
@@ -210,20 +223,34 @@ class App extends React.Component {
   handleChangeRegions = (event) => {
     debugger;
 
-    this.state.isFilter = false;
+    // this.state.allPokemons = [];
+    // var emptyArray = [];
+
+    // this.setState({
+    //     allPokemons : emptyArray,
+    // })
+
+    // this.state.isFilter = false;
 
     for (var i = 0; i < this.state.regions.length; i++) {
       if (this.state.regions[i].name === event.target.value) {
-        this.state.limit = this.state.regions[i].limit;
-        this.state.offset = this.state.regions[i].offset;
-        this.state.allPokemons = [];
-        this.state.showLoading = true;
+        // this.state.limit = this.state.regions[i].limit;
+        // this.state.offset = this.state.regions[i].offset;
+        // this.state.allPokemons = [];
+        // this.state.showLoading = true;
 
         this.setState({
           valueregion: event.target.value,
           valuetype: "all types",
           isSearch: false,
+          isFilter: false,
+          showLoading: false,
         });
+
+        this.getAllPokemons(
+          this.state.regions[i].offset,
+          this.state.regions[i].limit
+        );
 
         break;
       }
@@ -240,17 +267,23 @@ class App extends React.Component {
     //     offset: region.offset,
     // })
 
-    this.forceUpdate();
+    // this.forceUpdate();
+
+    // this.setState({
+    //     allPokemons : [],
+    // }, () => {
+    //     // this.getAllPokemons();
+    // })
 
     console.log("limit");
     console.log(event.target.value);
     // console.log("offset");
     // console.log(this.state.offset)
 
-    this.getAllPokemons();
+    // this.getAllPokemons();
   };
 
-  handleChangeTypes = (event) => {
+  handleChangeTypes = async (event) => {
     debugger;
 
     if (event.target.value === "all types") {
@@ -272,10 +305,19 @@ class App extends React.Component {
         if (
           event.target.value === this.state.allPokemons[i].types[j].type.name
         ) {
-          this.state.filterPokemons.push(this.state.allPokemons[i]);
+          // this.state.filterPokemons.push(this.state.allPokemons[i])
+          this.setState({
+            filterPokemons: this.state.filterPokemons.concat(
+              this.state.allPokemons[i]
+            ),
+          });
         }
       }
     }
+
+    this.state.filterPokemons.length === 0
+      ? this.setState({ noDataFound: true })
+      : this.setState({ noDataFound: false });
 
     this.setState({
       valuetype: event.target.value,
@@ -335,7 +377,15 @@ class App extends React.Component {
     if (currentTheme === "light") {
       targetTheme = "dark";
 
+      this.setState({
+        isChecked: true,
+      });
+
       console.log(targetTheme);
+    } else {
+      this.setState({
+        isChecked: false,
+      });
     }
 
     // var modeSwitch = document.getElementById("mode__label");
@@ -349,10 +399,13 @@ class App extends React.Component {
       <>
         {this.state.showLoading && (
           <div className="app__container">
-            <img
-              src="https://i.gifer.com/VgI.gif"
-              className="loading__gif"
-            ></img>
+            <div className="loading__text">Loading</div>
+            <div className="gif__container">
+              <img
+                src="https://i.gifer.com/VgI.gif"
+                className="loading__gif noselect"
+              ></img>
+            </div>
           </div>
         )}
         {!this.state.showLoading && (
@@ -385,6 +438,7 @@ class App extends React.Component {
                     name="swich-theme"
                     id="themeSwitch"
                     onClick={this.changeTheme}
+                    checked={this.state.isChecked}
                   />
                   <div className="toggle-bg"></div>
                   <div className="toggle-thumb">
@@ -393,7 +447,7 @@ class App extends React.Component {
                   </div>
                 </div>
               </div>
-              <div className="poke__logos">
+              <div className="poke__logos noselect">
                 <img src={Pokedex} alt="pokelogo" className="poke__logo" />
               </div>
               <div
@@ -403,7 +457,7 @@ class App extends React.Component {
                 <GitHubIcon></GitHubIcon>
               </div>
             </div>
-            <div className="filter__container">
+            <div className="filter__container noselect">
               <div className="filter__items">
                 <div>Region</div>
                 <select
@@ -477,7 +531,7 @@ class App extends React.Component {
                   : !this.state.isFilter
                   ? Object.keys(this.state.allPokemons).map((item, index) => (
                       <Pokemon
-                        key={index}
+                        key={this.state.allPokemons[item].id}
                         id={this.state.allPokemons[item].id}
                         image={
                           this.state.allPokemons[item].sprites.other.dream_world
@@ -544,10 +598,12 @@ class App extends React.Component {
             </div>
 
             {this.state.noDataFound && (
-              <div className="no__data">No such Pokémon in this region :/</div>
+              <div className="no__data noselect">
+                No such Pokémon in this region :/
+              </div>
             )}
 
-            <div className="app__footer">
+            <div className="app__footer noselect">
               <div>
                 Built using{" "}
                 <a
