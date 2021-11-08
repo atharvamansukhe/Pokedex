@@ -4,6 +4,9 @@ import Dialog from "@material-ui/core/Dialog";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import { StylesProvider } from "@material-ui/core/styles";
 import "./InfoDialog.css";
+import ArrowRightAltIcon from "@material-ui/icons/ArrowRightAlt";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -193,8 +196,10 @@ export default function InfoDialog(props) {
                 <div className="info__container__data">
                   {/* <div><img src='https://d30y9cdsu7xlg0.cloudfront.net/png/53504-200.png' className="close__btn" onClick={props.cancel} style={closeImg} /></div> */}
                   <div className="right__box">
-                    <div className="info__container__headings">About</div>
-                    <div className="desc">{props.description}</div>
+                    <div>
+                      <div className="info__container__headings">About</div>
+                      <div className="desc">{props.description}</div>
+                    </div>
                     <div className="info__container__data__header">
                       <div className="info__container__data__abilities">
                         <div className="info__container__headings">
@@ -221,6 +226,44 @@ export default function InfoDialog(props) {
                             <div className="info__container__stat__columns__val">
                               {stat["stat__val"]}
                             </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="info__container__headings">Evolution</div>
+                      <div className="evolution__box">
+                        {props.evoChain.map((value, index, elements) => (
+                          <div className="evolution__sub__box">
+                            <div>
+                              <div className="evolution__poke__name">
+                                {elements[index].species_name}
+                              </div>
+                              <div
+                                className="evolution__img__div"
+                                style={{
+                                  background: `linear-gradient(${color1}, ${color2})`,
+                                }}
+                              >
+                                {/* <LazyLoadImage
+                                                                    alt="image-pokemon"
+                                                                    height={80}
+                                                                    src={elements[index].image_url}
+                                                                    visibleByDefault={false}
+                                                                    delayMethod={'debounce'}
+                                                                    effect="blur"
+                                                                    className="evo_img"
+                                                                /> */}
+                                <img
+                                  src={elements[index].image_url}
+                                  className="evo_img"
+                                />
+                              </div>
+                            </div>
+                            {elements[index + 1] && (
+                              <ArrowRightAltIcon className="arrow__right"></ArrowRightAltIcon>
+                            )}
                           </div>
                         ))}
                       </div>
