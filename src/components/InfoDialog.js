@@ -213,7 +213,6 @@ export default function InfoDialog(props) {
                         </div>
                       </div>
                     </div>
-
                     <div>
                       <div className="info__container__headings stats">
                         Base Stats
@@ -231,7 +230,6 @@ export default function InfoDialog(props) {
                         ))}
                       </div>
                     </div>
-
                     <div>
                       <div className="info__container__headings">Evolution</div>
                       <div className="evolution__box">
@@ -257,6 +255,14 @@ export default function InfoDialog(props) {
                                     delayMethod={"debounce"}
                                     effect="blur"
                                     className="evo_img"
+                                    onClick={() =>
+                                      props.evolutionPokemon(
+                                        props.number,
+                                        elements[index].species_name,
+                                        props.category,
+                                        elements[index].image_url
+                                      )
+                                    }
                                   />
                                   {/* <img src={elements[index].image_url} className="evo_img" /> */}
                                 </div>
