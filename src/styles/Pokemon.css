@@ -13,8 +13,8 @@
   --ice: #75d0c1;
   --normal: #a0a29f;
   --poison: #b763cf;
-  --psychic: #fa8581;
-  --rock: #c9bb8a;
+  --psychic: #ff2ca8;
+  --rock: #a38c21;
   --steel: #5695a3;
   --water: #539ddf;
 }
@@ -79,10 +79,12 @@ h3 {
   color: var(--pokenumber);
   font-family: "Teko", sans-serif;
 }
+
 .thumbnail__container img {
   width: 120px;
   height: 120px;
 }
+
 .thumbnail__container small {
   text-transform: capitalize;
 }
@@ -215,4 +217,31 @@ h3 {
 
 .poke__name h3 {
   margin-top: 0px;
+}
+
+@media screen and (max-width: 767px) {
+  .thumbnail__container .img__thumbnail {
+    width: 90px;
+    height: 90px;
+  }
+  .thumbnail__container {
+    min-width: 175px;
+    height: 225px;
+    margin: 1.25rem 0.75rem;
+    padding: 1.25rem 0;
+  }
+  .image__container {
+    height: 90px;
+    width: 90px;
+  }
+  .thumbnail__container .poke__number {
+    font-size: 1.75em;
+  }
+  .poke__name h3 {
+    margin-top: 15px;
+    font-size: 1em;
+  }
+  .poke__type {
+    margin-top: 20px;
+  }
 }
