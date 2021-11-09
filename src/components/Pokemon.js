@@ -5,8 +5,6 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 import { colorTypeGradients } from "../utils/utils";
 
 const Pokemon = ({ id, image, name, type, onElemClick }) => {
-  // const style = `thumbnail__container ${type}`;
-
   var finalColor;
 
   if (type.length === 2) {

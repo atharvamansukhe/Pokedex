@@ -12,7 +12,6 @@ class App extends React.Component {
     this.state = {
       allPokemons: [],
       searchPokemons: [],
-      swapPokemons: [],
       filterPokemons: [],
       evoChain: [],
       abilities: "",
@@ -145,7 +144,7 @@ class App extends React.Component {
   };
 
   fetchPokemonData = async (number, pokemon, category, imageURL) => {
-    debugger;
+    // debugger
 
     const response = await axios
       .get(`https://pokeapi.co/api/v2/pokemon/${pokemon}`)
@@ -192,7 +191,7 @@ class App extends React.Component {
   };
 
   fetchEvoChainURL = async (pokemon_name) => {
-    debugger;
+    // debugger
 
     const response = await axios
       .get(`https://pokeapi.co/api/v2/pokemon-species/${pokemon_name}`)
@@ -202,7 +201,7 @@ class App extends React.Component {
   };
 
   fetchEvoDetails = async (url) => {
-    debugger;
+    // debugger
     const response = await axios
       .get(url)
       .catch((err) => console.log("Error:", err));
@@ -227,17 +226,11 @@ class App extends React.Component {
     // console.log("evochain");
     // console.log(evoChain);
 
-    // this.setState({
-    //     evoChain : evoChain,
-    // })
-
     this.fetchEvoImages(evoChain);
-
-    // return evoChain;
   };
 
   fetchEvoImages = async (evoChainArr) => {
-    debugger;
+    // debugger
     for (var i = 0; i < evoChainArr.length; i++) {
       const response = await axios
         .get(`https://pokeapi.co/api/v2/pokemon/${evoChainArr[i].species_name}`)
@@ -252,14 +245,10 @@ class App extends React.Component {
     this.setState({
       evoChain: evoChainArr,
     });
-
-    // console.log("evoChain")
-    // console.log(evoChainArr);
-    // console.log(this.state.evoChain);
   };
 
   fetchPokemonDescription = async (pokemon_name) => {
-    debugger;
+    // debugger
 
     try {
       const response = await axios
@@ -292,7 +281,7 @@ class App extends React.Component {
   };
 
   handleChangeRegions = (event) => {
-    debugger;
+    // debugger
 
     for (var i = 0; i < this.state.regions.length; i++) {
       if (this.state.regions[i].name === event.target.value) {
@@ -354,7 +343,7 @@ class App extends React.Component {
   };
 
   handleChangeSearch = (event) => {
-    debugger;
+    // debugger
 
     event.target.value.length > 0
       ? this.setState({
@@ -390,7 +379,7 @@ class App extends React.Component {
   };
 
   changeTheme = () => {
-    debugger;
+    // debugger
     var currentTheme = document.documentElement.getAttribute("data-theme");
     // console.log(currentTheme);
 
@@ -519,12 +508,26 @@ class App extends React.Component {
             <div className="pokemon__container">
               <div className="all__pokemons">
                 {this.state.isSearch
-                  ? Object.keys(this.state.searchPokemons).map(
-                      (item, index) => (
-                        <Pokemon
-                          key={this.state.allPokemons[item].id}
-                          id={this.state.searchPokemons[item].id}
-                          image={
+                  ? Object.keys(this.state.searchPokemons).map((item) => (
+                      <Pokemon
+                        key={this.state.allPokemons[item].id}
+                        id={this.state.searchPokemons[item].id}
+                        image={
+                          this.state.searchPokemons[item].sprites.other
+                            .dream_world.front_default
+                            ? this.state.searchPokemons[item].sprites.other
+                                .dream_world.front_default
+                            : this.state.searchPokemons[item].sprites.other[
+                                "official-artwork"
+                              ].front_default
+                        }
+                        name={this.state.searchPokemons[item].name}
+                        type={this.state.searchPokemons[item].types}
+                        onElemClick={() =>
+                          this.fetchPokemonData(
+                            this.state.searchPokemons[item].id,
+                            this.state.searchPokemons[item].name,
+                            this.state.searchPokemons[item].types,
                             this.state.searchPokemons[item].sprites.other
                               .dream_world.front_default
                               ? this.state.searchPokemons[item].sprites.other
@@ -532,28 +535,12 @@ class App extends React.Component {
                               : this.state.searchPokemons[item].sprites.other[
                                   "official-artwork"
                                 ].front_default
-                          }
-                          name={this.state.searchPokemons[item].name}
-                          type={this.state.searchPokemons[item].types}
-                          onElemClick={() =>
-                            this.fetchPokemonData(
-                              this.state.searchPokemons[item].id,
-                              this.state.searchPokemons[item].name,
-                              this.state.searchPokemons[item].types,
-                              this.state.searchPokemons[item].sprites.other
-                                .dream_world.front_default
-                                ? this.state.searchPokemons[item].sprites.other
-                                    .dream_world.front_default
-                                : this.state.searchPokemons[item].sprites.other[
-                                    "official-artwork"
-                                  ].front_default
-                            )
-                          }
-                        />
-                      )
-                    )
+                          )
+                        }
+                      />
+                    ))
                   : !this.state.isFilter
-                  ? Object.keys(this.state.allPokemons).map((item, index) => (
+                  ? Object.keys(this.state.allPokemons).map((item) => (
                       <Pokemon
                         key={this.state.allPokemons[item].id}
                         id={this.state.allPokemons[item].id}
@@ -584,12 +571,26 @@ class App extends React.Component {
                         }
                       />
                     ))
-                  : Object.keys(this.state.filterPokemons).map(
-                      (item, index) => (
-                        <Pokemon
-                          key={this.state.allPokemons[item].id}
-                          id={this.state.filterPokemons[item].id}
-                          image={
+                  : Object.keys(this.state.filterPokemons).map((item) => (
+                      <Pokemon
+                        key={this.state.allPokemons[item].id}
+                        id={this.state.filterPokemons[item].id}
+                        image={
+                          this.state.filterPokemons[item].sprites.other
+                            .dream_world.front_default
+                            ? this.state.filterPokemons[item].sprites.other
+                                .dream_world.front_default
+                            : this.state.filterPokemons[item].sprites.other[
+                                "official-artwork"
+                              ].front_default
+                        }
+                        name={this.state.filterPokemons[item].name}
+                        type={this.state.filterPokemons[item].types}
+                        onElemClick={() =>
+                          this.fetchPokemonData(
+                            this.state.filterPokemons[item].id,
+                            this.state.filterPokemons[item].name,
+                            this.state.filterPokemons[item].types,
                             this.state.filterPokemons[item].sprites.other
                               .dream_world.front_default
                               ? this.state.filterPokemons[item].sprites.other
@@ -597,36 +598,17 @@ class App extends React.Component {
                               : this.state.filterPokemons[item].sprites.other[
                                   "official-artwork"
                                 ].front_default
-                          }
-                          name={this.state.filterPokemons[item].name}
-                          type={this.state.filterPokemons[item].types}
-                          onElemClick={() =>
-                            this.fetchPokemonData(
-                              this.state.filterPokemons[item].id,
-                              this.state.filterPokemons[item].name,
-                              this.state.filterPokemons[item].types,
-                              this.state.filterPokemons[item].sprites.other
-                                .dream_world.front_default
-                                ? this.state.filterPokemons[item].sprites.other
-                                    .dream_world.front_default
-                                : this.state.filterPokemons[item].sprites.other[
-                                    "official-artwork"
-                                  ].front_default
-                            )
-                          }
-                        />
-                      )
-                    )}
+                          )
+                        }
+                      />
+                    ))}
               </div>
-              {/* <button className="load__more" onClick={() => this.getAllPokemons()}>Load More</button> */}
             </div>
-
             {this.state.noDataFound && (
               <div className="no__data noselect">
                 No such Pokémon in this region :/
               </div>
             )}
-
             <div className="app__footer noselect">
               <div>
                 Built using{" "}
