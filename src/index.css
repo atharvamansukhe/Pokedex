@@ -4,6 +4,8 @@ html {
   --bgcolor: none;
   --colorPrimary: #000;
   --filterHeading: #000;
+  --selectBg: #fff;
+  --selectText: #000;
 }
 
 html[data-theme="dark"] {
@@ -12,6 +14,8 @@ html[data-theme="dark"] {
   --bgcolor: #16171f;
   --colorPrimary: #fff;
   --filterHeading: #707384;
+  --selectBg: #16171f;
+  --selectText: #707384;
 }
 
 @font-face {
@@ -30,7 +34,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background 1s;
+  transition: background 1s ease;
 }
 
 code {
@@ -72,6 +76,8 @@ code {
 .poke__logo {
   margin-top: 10px;
   width: 15vw;
+  -webkit-filter: drop-shadow(5px 0px 0px rgba(0, 0, 0, 0.6));
+  filter: drop-shadow(5px 0px 0px rgba(0, 0, 0, 0.6));
 }
 
 .app__container {
@@ -81,6 +87,15 @@ code {
   justify-content: center;
   min-height: 100vh;
   /* padding: 3rem 0.5rem; */
+}
+
+.app__container .loading__text {
+  font-family: "Press Start 2P", cursive;
+  color: var(--colorPrimary);
+}
+
+.gif__container {
+  text-align: center;
 }
 
 .pokemon__container {
@@ -168,6 +183,7 @@ code {
   font-family: "Press Start 2P", cursive;
   font-size: 10px;
   text-align: center;
+  color: var(--colorPrimary);
 }
 
 .app__footer > :nth-child(1) {
@@ -196,6 +212,9 @@ code {
 .filter__items > input {
   width: 10vw;
   margin-top: 5px;
+  background-color: var(--selectBg);
+  color: var(--selectText);
+  border: 1px solid var(--selectText);
 }
 
 select {
@@ -258,13 +277,13 @@ select {
   opacity: 0;
   z-index: 1;
   transform: translateX(1px);
-  transition: all 0.35s;
+  transition: all 0.5s;
 }
 
 .switch .toggle-thumb .fa-moon {
   opacity: 1;
   transform: translateX(-30px);
-  transition: all 0.35s;
+  transition: all 0.55s;
 }
 
 .switch .toggle input[type="checkbox"]:checked ~ .toggle-thumb .fa-sun {
@@ -301,6 +320,26 @@ label {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Old versions of Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+
+select {
+  color: var(--selectText);
+  background-color: var(--selectBg);
 }
 
 @media screen and (max-width: 767px) {

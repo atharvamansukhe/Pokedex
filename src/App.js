@@ -154,6 +154,7 @@ class App extends React.Component {
 
     var statistics = [],
       abs = [];
+    var id = response.data.id;
 
     for (var i = 0; i < response.data.abilities.length; i++) {
       abs.push(response.data.abilities[i].ability.name);
@@ -170,7 +171,7 @@ class App extends React.Component {
       weight: response.data.weight,
       height: response.data.height,
       category: category,
-      pokeNumber: number,
+      pokeNumber: id,
       imageURL: imageURL,
       pokeName: pokemon,
       showInfo: true,
@@ -252,9 +253,9 @@ class App extends React.Component {
       evoChain: evoChainArr,
     });
 
-    console.log("evoChain");
-    console.log(evoChainArr);
-    console.log(this.state.evoChain);
+    // console.log("evoChain")
+    // console.log(evoChainArr);
+    // console.log(this.state.evoChain);
   };
 
   fetchPokemonDescription = async (pokemon_name) => {
@@ -453,13 +454,13 @@ class App extends React.Component {
             <div className="app__header">
               <div className="switch">
                 <div className="toggle">
-                  <label for="themeSwitch"></label>
+                  <label htmlFor="themeSwitch"></label>
                   <input
                     type="checkbox"
                     name="swich-theme"
                     id="themeSwitch"
                     onClick={this.changeTheme}
-                    checked={this.state.isChecked}
+                    defaultChecked
                   />
                   <div className="toggle-bg"></div>
                   <div className="toggle-thumb">
@@ -486,7 +487,7 @@ class App extends React.Component {
                   onChange={this.handleChangeRegions}
                 >
                   {this.state.regions.map((region) => (
-                    <option value={region.name}>
+                    <option key={region.name} value={region.name}>
                       {region.name}&nbsp;({region.offset + 1}-
                       {region.limit + region.offset})
                     </option>
@@ -500,7 +501,9 @@ class App extends React.Component {
                   onChange={this.handleChangeTypes}
                 >
                   {this.state.types.map((type) => (
-                    <option value={type}>{type}</option>
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -519,7 +522,7 @@ class App extends React.Component {
                   ? Object.keys(this.state.searchPokemons).map(
                       (item, index) => (
                         <Pokemon
-                          key={index}
+                          key={this.state.allPokemons[item].id}
                           id={this.state.searchPokemons[item].id}
                           image={
                             this.state.searchPokemons[item].sprites.other
@@ -584,7 +587,7 @@ class App extends React.Component {
                   : Object.keys(this.state.filterPokemons).map(
                       (item, index) => (
                         <Pokemon
-                          key={index}
+                          key={this.state.allPokemons[item].id}
                           id={this.state.filterPokemons[item].id}
                           image={
                             this.state.filterPokemons[item].sprites.other
