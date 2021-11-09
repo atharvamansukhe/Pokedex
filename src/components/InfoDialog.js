@@ -9,6 +9,8 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import Delayed from "./Delayed";
 import { colorTypeGradients } from "../utils/utils";
+import Tooltip from "@material-ui/core/Tooltip";
+import Zoom from "@material-ui/core/Zoom";
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -62,16 +64,23 @@ export default function InfoDialog(props) {
                   </div>
                   <div className="info__container__data__type">
                     {props.category.map((category) => (
-                      <div
+                      <Tooltip
+                        TransitionComponent={Zoom}
                         key={category.type.name}
-                        className={`poke__type__bg ${category.type.name}`}
+                        title={category.type.name}
+                        arrow
                       >
-                        <img
-                          src={`${category.type.name}.png`}
-                          title={category.type.name}
-                          alt="poke-type"
-                        ></img>
-                      </div>
+                        <div
+                          key={category.type.name}
+                          className={`poke__type__bg ${category.type.name}`}
+                        >
+                          <img
+                            src={`${category.type.name}.png`}
+                            title={category.type.name}
+                            alt="poke-type"
+                          ></img>
+                        </div>
+                      </Tooltip>
                     ))}
                   </div>
                   <div>

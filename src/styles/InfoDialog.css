@@ -198,6 +198,7 @@ html[data-theme="dark"] {
   height: 80px;
   margin: auto;
   display: flex;
+  cursor: pointer;
 }
 
 .evolution__img__div:hover {
@@ -213,6 +214,7 @@ html[data-theme="dark"] {
   align-items: center;
   justify-content: center;
   transition: all 0.35s;
+  margin-top: 3vh;
 }
 
 .evolution__poke__name {
@@ -227,8 +229,17 @@ html[data-theme="dark"] {
 }
 
 .MuiDialogContent-root:first-child {
-  padding-top: 30px;
-  padding-bottom: 30px;
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+
+.ability__list {
+  display: flex;
+  gap: 0 30px;
+}
+
+.MuiTooltip-tooltip {
+  font-size: 15px !important;
 }
 
 /* phone */
