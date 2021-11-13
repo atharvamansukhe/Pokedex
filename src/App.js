@@ -8,6 +8,7 @@ import Scroll from "./components/Scroll";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Loading from "./components/Loading";
+import Filters from "./components/Filters";
 
 class App extends React.Component {
   constructor(props) {
@@ -463,43 +464,50 @@ class App extends React.Component {
                         </div>
                     </div> */}
             <Header />
-            <div className="filter__container noselect">
-              <div className="filter__items">
-                <div>Region</div>
-                <select
-                  value={this.state.valueregion}
-                  onChange={this.handleChangeRegions}
-                >
-                  {this.state.regions.map((region) => (
-                    <option key={region.name} value={region.name}>
-                      {region.name}&nbsp;({region.offset + 1}-
-                      {region.limit + region.offset})
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="filter__items">
-                <div>Type</div>
-                <select
-                  value={this.state.valuetype}
-                  onChange={this.handleChangeTypes}
-                >
-                  {this.state.types.map((type) => (
-                    <option key={type} value={type}>
-                      {type}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="filter__items">
-                <label>Search</label>
-                <input
-                  type="text"
-                  value={this.state.valuesearch}
-                  onChange={this.handleChangeSearch}
-                />
-              </div>
-            </div>
+            {/* <div className="filter__container noselect">
+                        <div className="filter__items">
+                            <div>
+                                Region
+                            </div>
+                            <select value={this.state.valueregion} onChange={this.handleChangeRegions}>
+                                {this.state.regions.map((region) => (
+                                    <option
+                                        key={region.name}
+                                        value={region.name}>{region.name}&nbsp;({region.offset + 1}-{region.limit + region.offset})
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="filter__items">
+                            <div>
+                                Type
+                            </div>
+                            <select value={this.state.valuetype} onChange={this.handleChangeTypes}>
+                                {this.state.types.map((type) => (
+                                    <option
+                                        key={type}
+                                        value={type}>{type}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="filter__items">
+                            <label>
+                                Search
+                            </label>
+                            <input type="text" value={this.state.valuesearch} onChange={this.handleChangeSearch} />
+                        </div>
+                    </div> */}
+            <Filters
+              valueregion={this.state.valueregion}
+              regions={this.state.regions}
+              valuetype={this.state.valuetype}
+              valuesearch={this.state.valuesearch}
+              types={this.state.types}
+              regionsSelect={this.handleChangeRegions}
+              typesSelect={this.handleChangeTypes}
+              searchChange={this.handleChangeSearch}
+            />
             <div className="pokemon__container">
               <div className="all__pokemons">
                 {this.state.isSearch
