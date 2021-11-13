@@ -347,7 +347,7 @@ class App extends React.Component {
   };
 
   handleChangeSearch = (event) => {
-    // debugger
+    debugger;
 
     event.target.value.length > 0
       ? this.setState({
@@ -367,7 +367,8 @@ class App extends React.Component {
       if (
         this.state.allPokemons[i].name.includes(
           event.target.value.toLowerCase()
-        )
+        ) ||
+        this.state.allPokemons[i].id == event.target.value
       ) {
         searchArr.push(this.state.allPokemons[i]);
       }
@@ -378,9 +379,9 @@ class App extends React.Component {
       : this.setState({ noDataFound: false, searchPokemons: searchArr });
   };
 
-  openGithub = () => {
-    window.open("https://github.com/s1varam/pokedex");
-  };
+  // openGithub = () => {
+  //     window.open("https://github.com/s1varam/pokedex");
+  // }
 
   // changeTheme = () => {
 
@@ -513,7 +514,7 @@ class App extends React.Component {
                 {this.state.isSearch
                   ? Object.keys(this.state.searchPokemons).map((item) => (
                       <Pokemon
-                        key={this.state.allPokemons[item].id}
+                        key={this.state.searchPokemons[item].id}
                         id={this.state.searchPokemons[item].id}
                         image={
                           this.state.searchPokemons[item].sprites.other
@@ -576,7 +577,7 @@ class App extends React.Component {
                     ))
                   : Object.keys(this.state.filterPokemons).map((item) => (
                       <Pokemon
-                        key={this.state.allPokemons[item].id}
+                        key={this.state.filterPokemons[item].id}
                         id={this.state.filterPokemons[item].id}
                         image={
                           this.state.filterPokemons[item].sprites.other

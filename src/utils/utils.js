@@ -4,7 +4,7 @@ export const colorTypeGradients = (type1, type2, length) => {
 
   switch (type1) {
     case "grass":
-      color1 = "#8bec83";
+      color1 = "#a8ff98";
       break;
     case "poison":
       color1 = "#d6a2e4";
@@ -65,7 +65,7 @@ export const colorTypeGradients = (type1, type2, length) => {
   if (length === 2) {
     switch (type2) {
       case "grass":
-        color2 = "#8bec83";
+        color2 = "#a8ff98";
         break;
       case "poison":
         color2 = "#d6a2e4";
